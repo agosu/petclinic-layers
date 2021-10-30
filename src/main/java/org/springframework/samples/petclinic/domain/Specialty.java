@@ -13,25 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.system;
+package org.springframework.samples.petclinic.domain;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
- * Controller used to showcase what happens when an exception is thrown
+ * Models a {@link Vet Vet's} specialty (for example, dentistry).
  *
- * @author Michael Isvy
- * <p/>
- * Also see how a view that resolves to "error" has been added ("error.html").
+ * @author Juergen Hoeller
  */
-@Controller
-class CrashController {
-
-	@GetMapping("/oups")
-	public String triggerException() {
-		throw new RuntimeException(
-				"Expected: controller used to showcase what " + "happens when an exception is thrown");
-	}
+@Entity
+@Table(name = "specialties")
+public class Specialty extends NamedEntity implements Serializable {
 
 }

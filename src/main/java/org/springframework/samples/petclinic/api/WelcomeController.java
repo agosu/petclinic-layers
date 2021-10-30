@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.owner;
 
-import org.springframework.samples.petclinic.model.NamedEntity;
+package org.springframework.samples.petclinic.api;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
-/**
- * @author Juergen Hoeller Can be Cat, Dog, Hamster...
- */
-@Entity
-@Table(name = "types")
-public class PetType extends NamedEntity {
+@Controller
+class WelcomeController {
+
+	@GetMapping("/")
+	public String welcome() {
+		return "welcome";
+	}
 
 }
