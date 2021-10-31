@@ -27,10 +27,6 @@ public class OwnerService {
 		return ownerRepository.save(owner);
 	}
 
-	public Owner updateOwner(Owner owner) {
-		return ownerRepository.update(owner);
-	}
-
 	public void deleteOwnerById(int id) {
 		ownerRepository.deleteById(id);
 	}

@@ -32,10 +32,6 @@ public class PetService {
 		return petRepository.save(pet);
 	}
 
-	public Pet updatePet(Pet pet) {
-		return petRepository.update(pet);
-	}
-
 	public void deletePetById(int id) {
 		petRepository.deleteById(id);
 	}

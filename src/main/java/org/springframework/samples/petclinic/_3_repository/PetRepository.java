@@ -23,8 +23,6 @@ public interface PetRepository extends Repository<Pet, Integer> {
 
 	Pet save(Pet pet);
 
-	Pet update(Pet pet);
-
 	void deleteById(int id);
 
 }

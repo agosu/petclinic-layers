@@ -26,10 +26,6 @@ public class VisitService {
 		return visitRepository.save(visit);
 	}
 
-	public Visit updateVisit(Visit visit) {
-		return visitRepository.update(visit);
-	}
-
 	public void deleteVisitById(int id) {
 		visitRepository.deleteById(id);
 	}

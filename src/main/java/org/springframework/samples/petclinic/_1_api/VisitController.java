@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController("/visits")
+@RestController
+@RequestMapping("/visits")
 class VisitController {
 
 	private final VisitService visitService;
@@ -29,11 +30,6 @@ class VisitController {
 	@PostMapping
 	public Visit createVisit(@Valid Visit visit) {
 		return visitService.createVisit(visit);
-	}
-
-	@PutMapping
-	public Visit updateVisit(@Valid Visit visit) {
-		return visitService.updateVisit(visit);
 	}
 
 	@DeleteMapping("/{id}")

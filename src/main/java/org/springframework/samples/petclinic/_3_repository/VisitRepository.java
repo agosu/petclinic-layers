@@ -17,8 +17,6 @@ public interface VisitRepository extends Repository<Visit, Integer> {
 
 	Visit save(Visit visit);
 
-	Visit update(Visit visit);
-
 	void deleteById(int id);
 
 	List<Visit> findByPetId(Integer petId);

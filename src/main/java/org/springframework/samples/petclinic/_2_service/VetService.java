@@ -27,10 +27,6 @@ public class VetService {
 		return vetRepository.save(vet);
 	}
 
-	public Vet updateVet(Vet vet) {
-		return vetRepository.update(vet);
-	}
-
 	public void deleteVetById(int id) {
 		vetRepository.deleteById(id);
 	}
