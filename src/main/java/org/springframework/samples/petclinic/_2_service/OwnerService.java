@@ -18,6 +18,8 @@ import java.util.Map;
 @Service
 public class OwnerService {
 
+	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
+
 	private final OwnerRepository owners;
 	private final VisitRepository visits;
 
@@ -26,13 +28,20 @@ public class OwnerService {
 		this.visits = visits;
 	}
 
-	public void createInitOwner(Map<String, Object> model) {
+	public String initOwner(Map<String, Object> model, boolean isFindForm) {
 		Owner owner = new Owner();
 		model.put("owner", owner);
+		return isFindForm ? "owners/findOwners" : VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
-	public void saveOwner(Owner owner) {
-		this.owners.save(owner);
+	public String saveOwner(Owner owner, BindingResult result) {
+		if (result.hasErrors()) {
+			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		}
+		else {
+			this.owners.save(owner);
+			return "redirect:/owners/" + owner.getId();
+		}
 	}
 
 	public String findOwners(int page, Owner owner, BindingResult result, Model model) {
@@ -63,10 +72,20 @@ public class OwnerService {
 		return this.owners.findById(ownerId);
 	}
 
-	public String updateOwner(Owner owner, int ownerId) {
-		owner.setId(ownerId);
-		this.owners.save(owner);
-		return "redirect:/owners/{ownerId}";
+	public String initUpdateOwner(int ownerId, Model model) {
+		model.addAttribute(findById(ownerId));
+		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+	}
+
+	public String updateOwner(Owner owner, int ownerId, BindingResult result) {
+		if (result.hasErrors()) {
+			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		}
+		else {
+			owner.setId(ownerId);
+			this.owners.save(owner);
+			return "redirect:/owners/{ownerId}";
+		}
 	}
 
 	public ModelAndView getOwnerView(int ownerId) {
