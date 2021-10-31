@@ -4,6 +4,7 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.samples.petclinic._2_service.OwnerService;
 import org.springframework.samples.petclinic._4_domain.Owner;
+import org.springframework.samples.petclinic._4_domain.Pet;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,8 +33,13 @@ class OwnerController {
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteOwner(@PathVariable  int id){
+	public void deleteOwner(@PathVariable int id){
 		ownerService.deleteOwnerById(id);
+	}
+
+	@PostMapping("/{id}/pets")
+	public Owner addPetToOwner(@PathVariable int id, @Valid Pet pet) {
+		return ownerService.addPet(id, pet);
 	}
 
 }

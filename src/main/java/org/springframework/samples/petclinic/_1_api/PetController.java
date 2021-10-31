@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic._1_api;
 import org.springframework.samples.petclinic._2_service.PetService;
 import org.springframework.samples.petclinic._4_domain.Pet;
 import org.springframework.samples.petclinic._4_domain.PetType;
+import org.springframework.samples.petclinic._4_domain.Visit;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -40,6 +41,11 @@ class PetController {
 	@DeleteMapping("/{id}")
 	public void deletePet(@PathVariable int id) {
 		petService.deletePetById(id);
+	}
+
+	@PostMapping("/{id}/visits")
+	public Pet addVisitToPet(@PathVariable int id, @Valid Visit visit) {
+		return petService.addVisit(id, visit);
 	}
 
 }

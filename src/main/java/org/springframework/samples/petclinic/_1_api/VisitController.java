@@ -27,6 +27,11 @@ class VisitController {
 		return visitService.findVisitById(id);
 	}
 
+	@GetMapping("/byPetId/{id}")
+	public List<Visit> getVisitByPetId(@PathVariable int id) {
+		return visitService.findByPetId(id);
+	}
+
 	@PostMapping
 	public Visit createVisit(@Valid Visit visit) {
 		return visitService.createVisit(visit);
