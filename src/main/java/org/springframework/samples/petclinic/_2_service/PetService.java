@@ -19,9 +19,11 @@ public class PetService {
 	private static final String VIEWS_PETS_CREATE_OR_UPDATE_FORM = "pets/createOrUpdatePetForm";
 
 	private final PetRepository pets;
+	private final OwnerService ownerService;
 
-	public PetService(PetRepository pets) {
+	public PetService(PetRepository pets, OwnerService ownerService) {
 		this.pets = pets;
+		this.ownerService = ownerService;
 	}
 
 	public Collection<PetType> getPetTypes() {
@@ -30,7 +32,7 @@ public class PetService {
 
 	public String initCreatePet(Owner owner, ModelMap model) {
 		Pet pet = new Pet();
-		owner.addPet(pet);
+		ownerService.addPet(owner, pet);
 		model.put("pet", pet);
 		return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}
@@ -39,7 +41,7 @@ public class PetService {
 		if (StringUtils.hasLength(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
 			result.rejectValue("name", "duplicate", "already exists");
 		}
-		owner.addPet(pet);
+		ownerService.addPet(owner, pet);
 		if (result.hasErrors()) {
 			model.put("pet", pet);
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
@@ -63,7 +65,7 @@ public class PetService {
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}
 		else {
-			owner.addPet(pet);
+			ownerService.addPet(owner, pet);
 			this.pets.save(pet);
 			return "redirect:/owners/{ownerId}";
 		}

@@ -92,13 +92,6 @@ public class Owner extends Person {
 		return Collections.unmodifiableList(sortedPets);
 	}
 
-	public void addPet(Pet pet) {
-		if (pet.isNew()) {
-			this.pets.add(pet);
-		}
-		pet.setOwner(this);
-	}
-
 	/**
 	 * Return the Pet with the given name, or null if none found for this Owner.
 	 * @param name to test
