@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.api;
+package org.springframework.samples.petclinic._1_api;
 
-import org.springframework.samples.petclinic.domain.Owner;
-import org.springframework.samples.petclinic.domain.Pet;
-import org.springframework.samples.petclinic.repository.PetRepository;
-import org.springframework.samples.petclinic.domain.PetType;
+import org.springframework.samples.petclinic._2_service.OwnerService;
+import org.springframework.samples.petclinic._2_service.PetService;
+import org.springframework.samples.petclinic._4_domain.Owner;
+import org.springframework.samples.petclinic._4_domain.Pet;
+import org.springframework.samples.petclinic._4_domain.PetType;
 import org.springframework.samples.petclinic.util.PetValidator;
-import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.Collection;
 
@@ -40,25 +38,22 @@ import java.util.Collection;
 @RequestMapping("/owners/{ownerId}")
 class PetController {
 
-	private static final String VIEWS_PETS_CREATE_OR_UPDATE_FORM = "pets/createOrUpdatePetForm";
+	private final PetService petService;
+	private final OwnerService ownerService;
 
-	private final PetRepository pets;
-
-	private final OwnerRepository owners;
-
-	public PetController(PetRepository pets, OwnerRepository owners) {
-		this.pets = pets;
-		this.owners = owners;
+	public PetController(PetService petService, OwnerService ownerService) {
+		this.petService = petService;
+		this.ownerService = ownerService;
 	}
 
 	@ModelAttribute("types")
 	public Collection<PetType> populatePetTypes() {
-		return this.pets.findPetTypes();
+		return petService.getPetTypes();
 	}
 
 	@ModelAttribute("owner")
 	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
-		return this.owners.findById(ownerId);
+		return ownerService.findById(ownerId);
 	}
 
 	@InitBinder("owner")
@@ -73,47 +68,22 @@ class PetController {
 
 	@GetMapping("/pets/new")
 	public String initCreationForm(Owner owner, ModelMap model) {
-		Pet pet = new Pet();
-		owner.addPet(pet);
-		model.put("pet", pet);
-		return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
+		return petService.initCreatePet(owner, model);
 	}
 
 	@PostMapping("/pets/new")
 	public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result, ModelMap model) {
-		if (StringUtils.hasLength(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
-			result.rejectValue("name", "duplicate", "already exists");
-		}
-		owner.addPet(pet);
-		if (result.hasErrors()) {
-			model.put("pet", pet);
-			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
-		}
-		else {
-			this.pets.save(pet);
-			return "redirect:/owners/{ownerId}";
-		}
+		return petService.createPet(owner, pet, result, model);
 	}
 
 	@GetMapping("/pets/{petId}/edit")
 	public String initUpdateForm(@PathVariable("petId") int petId, ModelMap model) {
-		Pet pet = this.pets.findById(petId);
-		model.put("pet", pet);
-		return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
+		return petService.initUpdate(petId, model);
 	}
 
 	@PostMapping("/pets/{petId}/edit")
 	public String processUpdateForm(@Valid Pet pet, BindingResult result, Owner owner, ModelMap model) {
-		if (result.hasErrors()) {
-			pet.setOwner(owner);
-			model.put("pet", pet);
-			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
-		}
-		else {
-			owner.addPet(pet);
-			this.pets.save(pet);
-			return "redirect:/owners/{ownerId}";
-		}
+		return petService.update(pet, result, owner, model);
 	}
 
 }

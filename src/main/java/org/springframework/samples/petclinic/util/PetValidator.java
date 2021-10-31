@@ -15,7 +15,7 @@
  */
 package org.springframework.samples.petclinic.util;
 
-import org.springframework.samples.petclinic.domain.Pet;
+import org.springframework.samples.petclinic._4_domain.Pet;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

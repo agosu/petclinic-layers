@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.api;
+package org.springframework.samples.petclinic._1_api;
 
-import org.springframework.samples.petclinic.domain.Pet;
-import org.springframework.samples.petclinic.repository.PetRepository;
-import org.springframework.samples.petclinic.domain.Visit;
-import org.springframework.samples.petclinic.repository.VisitRepository;
+import org.springframework.samples.petclinic._2_service.VisitService;
+import org.springframework.samples.petclinic._4_domain.Pet;
+import org.springframework.samples.petclinic._3_repository.PetRepository;
+import org.springframework.samples.petclinic._4_domain.Visit;
+import org.springframework.samples.petclinic._3_repository.VisitRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -37,13 +38,10 @@ import java.util.Map;
 @Controller
 class VisitController {
 
-	private final VisitRepository visits;
+	private final VisitService visitService;
 
-	private final PetRepository pets;
-
-	public VisitController(VisitRepository visits, PetRepository pets) {
-		this.visits = visits;
-		this.pets = pets;
+	public VisitController(VisitService visitService, PetRepository pets) {
+		this.visitService = visitService;
 	}
 
 	@InitBinder
@@ -60,12 +58,7 @@ class VisitController {
 	 */
 	@ModelAttribute("visit")
 	public Visit loadPetWithVisit(@PathVariable("petId") int petId, Map<String, Object> model) {
-		Pet pet = this.pets.findById(petId);
-		pet.setVisitsInternal(this.visits.findByPetId(petId));
-		model.put("pet", pet);
-		Visit visit = new Visit();
-		pet.addVisit(visit);
-		return visit;
+		return visitService.getVisit(petId, model);
 	}
 
 	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
@@ -77,13 +70,7 @@ class VisitController {
 	// Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
 	@PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
 	public String processNewVisitForm(@Valid Visit visit, BindingResult result) {
-		if (result.hasErrors()) {
-			return "pets/createOrUpdateVisitForm";
-		}
-		else {
-			this.visits.save(visit);
-			return "redirect:/owners/{ownerId}";
-		}
+		return visitService.createNewVisit(visit, result);
 	}
 
 }

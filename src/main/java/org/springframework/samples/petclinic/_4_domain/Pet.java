@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.domain;
+package org.springframework.samples.petclinic._4_domain;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
