@@ -4,6 +4,7 @@ import org.springframework.samples.petclinic._3_repository.PetRepository;
 import org.springframework.samples.petclinic._4_domain.Owner;
 import org.springframework.samples.petclinic._4_domain.Pet;
 import org.springframework.samples.petclinic._4_domain.PetType;
+import org.springframework.samples.petclinic._4_domain.Visit;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -70,6 +71,14 @@ public class PetService {
 
 	public Pet findById(int petId) {
 		return this.pets.findById(petId);
+	}
+
+	public Owner getOwner(int petId) {
+		return findById(petId).getOwner();
+	}
+
+	public void addVisit(Visit visit, Pet pet) {
+		pet.getVisits().add(visit);
 	}
 
 }

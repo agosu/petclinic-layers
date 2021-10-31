@@ -15,7 +15,6 @@
  */
 package org.springframework.samples.petclinic._1_api;
 
-import org.springframework.samples.petclinic._2_service.OwnerService;
 import org.springframework.samples.petclinic._2_service.PetService;
 import org.springframework.samples.petclinic._4_domain.Owner;
 import org.springframework.samples.petclinic._4_domain.Pet;
@@ -39,11 +38,9 @@ import java.util.Collection;
 class PetController {
 
 	private final PetService petService;
-	private final OwnerService ownerService;
 
-	public PetController(PetService petService, OwnerService ownerService) {
+	public PetController(PetService petService) {
 		this.petService = petService;
-		this.ownerService = ownerService;
 	}
 
 	@ModelAttribute("types")
@@ -52,8 +49,8 @@ class PetController {
 	}
 
 	@ModelAttribute("owner")
-	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
-		return ownerService.findById(ownerId);
+	public Owner findOwner(@PathVariable("petId") int petId) {
+		return petService.getOwner(petId);
 	}
 
 	@InitBinder("owner")

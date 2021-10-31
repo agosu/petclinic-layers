@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.petclinic._3_repository.VetRepository;
+import org.springframework.samples.petclinic._4_domain.Specialty;
 import org.springframework.samples.petclinic._4_domain.Vet;
 import org.springframework.samples.petclinic._4_domain.Vets;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,10 @@ public class VetService {
 		Vets vets = new Vets();
 		vets.getVetList().addAll(this.vets.findAll());
 		return vets;
+	}
+
+	public void addSpecialty(Specialty specialty, Vet vet) {
+		vet.getSpecialties().add(specialty);
 	}
 
 	private String addPaginationModel(int page, Page<Vet> paginated, Model model) {

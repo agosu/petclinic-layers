@@ -60,7 +60,7 @@ public class Owner extends Person {
 	private String telephone;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.EAGER)
-	private Set<Pet> pets;
+	private Set<Pet> pets = new HashSet<>();
 
 	public String getAddress() {
 		return this.address;
@@ -86,26 +86,15 @@ public class Owner extends Person {
 		this.telephone = telephone;
 	}
 
-	protected Set<Pet> getPetsInternal() {
-		if (this.pets == null) {
-			this.pets = new HashSet<>();
-		}
-		return this.pets;
-	}
-
-	protected void setPetsInternal(Set<Pet> pets) {
-		this.pets = pets;
-	}
-
 	public List<Pet> getPets() {
-		List<Pet> sortedPets = new ArrayList<>(getPetsInternal());
+		List<Pet> sortedPets = new ArrayList<>(this.pets);
 		PropertyComparator.sort(sortedPets, new MutableSortDefinition("name", true, true));
 		return Collections.unmodifiableList(sortedPets);
 	}
 
 	public void addPet(Pet pet) {
 		if (pet.isNew()) {
-			getPetsInternal().add(pet);
+			this.pets.add(pet);
 		}
 		pet.setOwner(this);
 	}
@@ -126,7 +115,7 @@ public class Owner extends Person {
 	 */
 	public Pet getPet(String name, boolean ignoreNew) {
 		name = name.toLowerCase();
-		for (Pet pet : getPetsInternal()) {
+		for (Pet pet : this.pets) {
 			if (!ignoreNew || !pet.isNew()) {
 				String compName = pet.getName();
 				compName = compName.toLowerCase();
@@ -142,9 +131,9 @@ public class Owner extends Person {
 	public String toString() {
 		return new ToStringCreator(this)
 
-				.append("id", this.getId()).append("new", this.isNew()).append("lastName", this.getLastName())
-				.append("firstName", this.getFirstName()).append("address", this.address).append("city", this.city)
-				.append("telephone", this.telephone).toString();
+			.append("id", this.getId()).append("new", this.isNew()).append("lastName", this.getLastName())
+			.append("firstName", this.getFirstName()).append("address", this.address).append("city", this.city)
+			.append("telephone", this.telephone).toString();
 	}
 
 }

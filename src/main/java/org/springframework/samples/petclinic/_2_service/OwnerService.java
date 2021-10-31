@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.petclinic._3_repository.OwnerRepository;
-import org.springframework.samples.petclinic._3_repository.VisitRepository;
 import org.springframework.samples.petclinic._4_domain.Owner;
 import org.springframework.samples.petclinic._4_domain.Pet;
 import org.springframework.stereotype.Service;
@@ -21,11 +20,11 @@ public class OwnerService {
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
 
 	private final OwnerRepository owners;
-	private final VisitRepository visits;
+	private final VisitService visitService;
 
-	public OwnerService(OwnerRepository ownerRepository, VisitRepository visits) {
+	public OwnerService(OwnerRepository ownerRepository, VisitService visitService) {
 		this.owners = ownerRepository;
-		this.visits = visits;
+		this.visitService = visitService;
 	}
 
 	public String initOwner(Map<String, Object> model, boolean isFindForm) {
@@ -92,7 +91,7 @@ public class OwnerService {
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
 		Owner owner = this.owners.findById(ownerId);
 		for (Pet pet : owner.getPets()) {
-			pet.setVisitsInternal(visits.findByPetId(pet.getId()));
+			pet.setVisits(visitService.findByPetId(pet.getId()));
 		}
 		mav.addObject(owner);
 		return mav;
